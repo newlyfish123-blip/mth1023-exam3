@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Exam 3">
+<title>Exam 3 Rational Expressions</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="theme-color" content="#b2541f" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14171c" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+html,body{margin:0}
+/* Layout: single-column focus rail. One problem at a time, steps stack downward as they unlock. */
+:root{
+  --bg:#f6f5f2; --panel:#ffffff; --ink:#1b1f26; --muted:#5d6472; --line:#e0ddd6;
+  --accent:#b2541f; --accent-soft:#fbeee6; --good:#2f6b4f; --good-soft:#e6f1ea;
+  --warn:#8a5a00; --warn-soft:#fbf1dc; --info:#2b4f7a; --info-soft:#e8eef6;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#14171c; --panel:#1c2026; --ink:#e9e7e2; --muted:#9aa2b1; --line:#2d333d;
+  --accent:#e08a56; --accent-soft:#2c2019; --good:#7fc8a1; --good-soft:#1a2721;
+  --warn:#e0b75f; --warn-soft:#2a2316; --info:#8fb6e2; --info-soft:#1a222c; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#14171c; --panel:#1c2026; --ink:#e9e7e2; --muted:#9aa2b1; --line:#2d333d;
+  --accent:#e08a56; --accent-soft:#2c2019; --good:#7fc8a1; --good-soft:#1a2721;
+  --warn:#e0b75f; --warn-soft:#2a2316; --info:#8fb6e2; --info-soft:#1a222c; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;margin:0}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+
+h1{font-size:1.45rem;font-weight:700;margin:0;letter-spacing:-.01em;text-wrap:balance}
+.sub{color:var(--muted);font-size:.9rem;margin:6px 0 0}
+
+.bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px}
+.track{flex:1;min-width:120px;height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.fill{height:100%;background:var(--good);width:0;transition:width .3s}
+.count{font-family:var(--mono);font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums}
+
+.grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.chip{font-family:var(--mono);font-size:.78rem;width:34px;height:32px;border-radius:7px;border:1px solid var(--line);
+  background:var(--panel);color:var(--muted);cursor:pointer;display:grid;place-items:center;padding:0}
+.chip:hover{border-color:var(--accent);color:var(--ink)}
+.chip.cur{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.chip.done{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+.chip.cur.done{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* Rules toolbox */
+.kit{margin-top:18px;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:0 16px}
+.kit>summary{cursor:pointer;font-weight:600;font-size:.95rem;padding:14px 0;list-style-position:inside}
+.kit>summary::marker{color:var(--accent)}
+.kit .kitnote{color:var(--muted);font-size:.86rem;margin:0 0 10px}
+.rulecard{border-top:1px solid var(--line);padding:12px 0}
+.rulecard h3{font-size:.9rem;margin:0 0 6px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.rid{font-family:var(--mono);font-size:.72rem;color:var(--accent);font-weight:600}
+.rulecard p{margin:0 0 7px;font-size:.9rem;color:var(--muted)}
+.rulecard .ex{font-family:var(--mono);font-size:.95rem;overflow-x:auto;padding-block:4px;color:var(--ink)}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:20px}
+.pnum{font-family:var(--mono);font-size:.78rem;color:var(--accent);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.ptask{font-size:1.05rem;font-weight:600;margin:6px 0 14px;text-wrap:balance}
+.expr{font-family:var(--mono);font-size:1.15rem;overflow-x:auto;max-width:100%;padding-block:8px}
+.word{font-family:var(--sans);font-size:1rem;line-height:1.6;background:transparent}
+
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .22em}
+.frac .n{border-bottom:1.5px solid currentColor;padding:0 .35em .1em;font-weight:400}
+.frac .d{padding:.1em .35em 0;font-weight:400}
+
+.pre{border:1px solid var(--info);background:var(--info-soft);border-radius:10px;padding:12px 14px;margin:0 0 16px}
+.pre .lbl{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--info)}
+.pre ul{margin:8px 0 0;padding-left:18px;font-size:.9rem}
+.pre li{margin:4px 0}
+.pre li b{font-family:var(--mono);font-size:.78rem;color:var(--info)}
+
+.steps{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.step{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:14px;background:var(--bg)}
+.step.in{animation:rise .22s ease-out}
+@keyframes rise{from{opacity:.4;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.step.in{animation:none}.fill{transition:none}}
+.rule{display:inline-block;font-size:.72rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  background:var(--accent-soft);color:var(--accent);padding:3px 9px;border-radius:99px}
+.act{margin:9px 0 0;font-weight:500}
+.math{font-family:var(--mono);font-size:1.05rem;margin-top:10px;overflow-x:auto;max-width:100%;padding-block:6px}
+.math .lines{display:flex;flex-direction:column;gap:7px}
+.why{margin-top:9px}
+.why summary{cursor:pointer;font-size:.85rem;color:var(--muted);font-weight:500}
+.why summary::marker{color:var(--accent)}
+.why p{margin:7px 0 0;font-size:.9rem;color:var(--muted)}
+
+.ctrl{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+button{font-family:var(--sans);font-size:.92rem;font-weight:600;border-radius:9px;cursor:pointer;
+  padding:11px 16px;border:1px solid var(--line);background:var(--panel);color:var(--ink);min-height:44px}
+button:hover{border-color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.primary:hover{filter:brightness(1.08)}
+.ghost{color:var(--muted)}
+button[disabled]{opacity:.45;cursor:default}
+
+.ans{margin-top:16px;border:1px solid var(--good);background:var(--good-soft);border-radius:10px;padding:14px}
+.ans .lbl{font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--good)}
+.ans .val{font-family:var(--mono);font-size:1.1rem;margin-top:7px;overflow-x:auto}
+
+.trap{margin-top:14px;border:1px solid var(--line);border-left:3px solid var(--warn);border-radius:10px;padding:13px 14px;background:var(--bg)}
+.trap .lbl{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--warn)}
+.trap p{margin:7px 0 0;font-size:.9rem}
+
+.flag{margin-top:14px;border:1px solid var(--warn);background:var(--warn-soft);border-radius:10px;padding:14px}
+.flag .lbl{font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--warn)}
+.flag p{margin:7px 0 0;font-size:.92rem}
+
+.nav{display:flex;justify-content:space-between;gap:9px;margin-top:20px}
+
+.ask{margin-top:26px;border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:18px}
+.ask h2{font-size:1rem;margin:0 0 4px}
+.ask .hint{color:var(--muted);font-size:.86rem;margin:0 0 12px}
+textarea{width:100%;min-height:76px;font-family:var(--sans);font-size:1rem;padding:11px;border-radius:9px;
+  border:1px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical}
+textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.quick{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}
+.quick button{font-size:.82rem;padding:8px 12px;min-height:38px;font-weight:500}
+.reply{margin-top:14px;padding:14px;border-radius:9px;background:var(--bg);border:1px solid var(--line);
+  white-space:pre-wrap;font-size:.95rem}
+.foot{margin-top:28px;color:var(--muted);font-size:.82rem;text-align:center}
+kbd{font-family:var(--mono);font-size:.78rem;border:1px solid var(--line);border-bottom-width:2px;
+  border-radius:5px;padding:1px 5px;background:var(--panel)}
+
+/* Phone: tighter chrome, bigger targets, action bar pinned to the thumb */
+@media (max-width:560px){
+  .wrap{padding-block:18px 40px}
+  h1{font-size:1.18rem}
+  .sub{font-size:.86rem}
+  .card{padding:14px;border-radius:12px;margin-top:16px}
+  .kit{padding:0 14px}
+  .chip{width:40px;height:40px;font-size:.84rem}
+  .grid{gap:7px}
+  .expr{font-size:1.02rem}
+  .math{font-size:.98rem}
+  .step{padding:12px}
+  .ptask{font-size:1rem}
+  .ctrl.main{position:sticky;bottom:0;z-index:5;background:var(--panel);margin:14px -14px 0;
+    padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);gap:7px}
+  .ctrl.main button{flex:1 1 auto;padding:12px 10px;font-size:.88rem}
+  .ctrl.main .ghost{flex:0 1 auto}
+  .nav button{flex:1}
+  .foot{display:none}
+}
+@media (max-width:380px){
+  .chip{width:36px;height:38px}
+  .expr{font-size:.96rem}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Exam 3 Rational Expressions</h1>
+  <p class="sub">MTH 1023 sample questions. One problem at a time, one step at a time. Every line of arithmetic is written out, nothing is assumed.</p>
+
+  <div class="bar">
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <span class="count" id="count">0 / 19 done</span>
+  </div>
+  <div class="grid" id="grid"></div>
+
+  <details class="kit" id="kit">
+    <summary>Rules toolbox: the 11 things every problem leans on</summary>
+    <p class="kitnote">Each problem lists which of these it needs. If a step feels like a jump, the missing piece is in here.</p>
+    <div id="kitbody"></div>
+  </details>
+
+  <div class="card">
+    <div class="pnum" id="pnum">Problem 1</div>
+    <div class="ptask" id="ptask"></div>
+    <div class="expr" id="pexpr"></div>
+    <div id="preBox"></div>
+    <div class="steps" id="steps"></div>
+    <div class="ctrl main">
+      <button class="primary" id="next">Show first step</button>
+      <button class="ghost" id="all">All steps</button>
+      <button class="ghost" id="got">Got it</button>
+    </div>
+    <div id="ansBox" hidden></div>
+    <div id="trapBox" hidden></div>
+    <div id="flagBox" hidden></div>
+  </div>
+
+  <div class="nav">
+    <button id="prev">&larr; Previous</button>
+    <button id="fwd">Next problem &rarr;</button>
+  </div>
+
+  <div class="ask" id="ask" hidden>
+    <h2>Stuck on a step?</h2>
+    <p class="hint">Ask about this problem. The question goes out with the problem and the steps you have open, so you do not have to re-type anything.</p>
+    <textarea id="q" placeholder="e.g. why did the (x+1) cancel there?"></textarea>
+    <div class="quick">
+      <button data-q="Explain the step I'm on right now in simpler words, assuming I forgot the rule it uses.">Explain simpler</button>
+      <button data-q="What am I supposed to already know to follow this step? Teach me that piece first, from scratch.">What am I missing?</button>
+      <button data-q="Why is this step necessary? What exactly breaks if I skip it?">Why this step?</button>
+      <button data-q="Give me one more practice problem just like this one, with the full worked steps and then the answer.">One more like it</button>
+    </div>
+    <div class="ctrl"><button class="primary" id="send">Ask</button></div>
+    <div class="reply" id="reply" hidden></div>
+  </div>
+
+  <div class="pre" style="margin-top:26px">
+    <div class="lbl">Works with no signal</div>
+    <ul>
+      <li>Open this once on wifi and the whole thing is saved to your phone. After that it loads on the subway with no connection and no sign-in.</li>
+      <li>To get the icon on your home screen: in Safari tap the <b>Share</b> button, scroll down, tap <b>Add to Home Screen</b>. It then opens full screen with no browser bars.</li>
+      <li>No ask-Claude box here, that needs a connection. The <b>Rules toolbox</b> at the top, the <b>Why this works</b> drop-down under every step, and <b>Where this one goes wrong</b> under every answer carry the same explanations.</li>
+      <li>Your progress saves on this phone, so you can close it and come back where you left off.</li>
+    </ul>
+  </div>
+
+  <p class="foot"><kbd>&rarr;</kbd> next step &middot; <kbd>N</kbd> next problem &middot; <kbd>P</kbd> previous</p>
+</div>
+
+<script>
+const F=(a,b)=>`<span class="frac"><b class="n">${a}</b><b class="d">${b}</b></span>`;
+const L=(...rows)=>`<div class="lines">${rows.map(r=>`<div>${r}</div>`).join("")}</div>`;
+
+/* ---------- Rules toolbox ---------- */
+const RULES={
+ factor_vs_term:{n:"Factor vs term",
+  p:"A factor is something being multiplied. A term is something being added or subtracted. You may only cancel factors. This single rule causes more lost points than anything else in the chapter.",
+  ex:L(`legal: ${F("x(x+4)","x(x&minus;1)")} = ${F("x+4","x&minus;1")}&nbsp;&nbsp;(x is a factor of both)`,
+       `illegal: ${F("x+4","x&minus;1")} &ne; ${F("4","&minus;1")}&nbsp;&nbsp;(x is a term, it cannot go)`)},
+ trinomial:{n:"Factoring x&sup2; + bx + c",
+  p:"Hunt for two numbers whose product is c and whose sum is b. List the factor pairs of c, then check the sums. Write the pairs down, do not do it in your head.",
+  ex:L("x&sup2; &minus; 5x + 6: pairs of 6 are 1&middot;6, 2&middot;3",
+       "c is +, b is &minus;, so BOTH numbers are negative",
+       "&minus;1 + &minus;6 = &minus;7 no&nbsp;&nbsp;|&nbsp;&nbsp;&minus;2 + &minus;3 = &minus;5 yes",
+       "answer: (x &minus; 2)(x &minus; 3)")},
+ signs:{n:"Sign shortcut for the hunt",
+  p:"The sign of c tells you whether the two numbers match in sign. The sign of b then tells you which sign they take. This cuts the search in half every time.",
+  ex:L("c positive &rarr; signs MATCH; b positive &rarr; both +, b negative &rarr; both &minus;",
+       "c negative &rarr; signs DIFFER; the bigger number takes b's sign")},
+ dos:{n:"Difference of squares",
+  p:"a&sup2; &minus; b&sup2; = (a &minus; b)(a + b). Two perfect squares with a minus between them. There is no middle term because the cross terms cancel. a&sup2; + b&sup2; does NOT factor.",
+  ex:L("x&sup2; &minus; 25 = (x &minus; 5)(x + 5)",
+       "9x&sup2; &minus; 4 = (3x &minus; 2)(3x + 2)&nbsp;&nbsp;since 9x&sup2; = (3x)&sup2;",
+       "x&sup2; + 25 does not factor")},
+ gcf:{n:"GCF comes out first",
+  p:"Before any other factoring, pull out what every term shares. Skipping this is how a factorable expression looks unfactorable.",
+  ex:L("x&sup3; + 4x&sup2; = x&sup2;(x + 4)",
+       "4x &minus; 20 = 4(x &minus; 5)",
+       "x&sup2; &minus; 3x = x(x &minus; 3)")},
+ flip:{n:"(a &minus; b) = &minus;(b &minus; a)",
+  p:"A binomial backwards is the negative of the original, not the same thing. Factoring out &minus;1 makes a reversed pair match so it can cancel.",
+  ex:L("2 &minus; 3x = &minus;(3x &minus; 2)",
+       `so ${F("3x &minus; 2","2 &minus; 3x")} = ${F("3x &minus; 2","&minus;(3x &minus; 2)")} = &minus;1`)},
+ minus:{n:"Minus in front of a group",
+  p:"Subtracting a numerator means subtracting EVERY term in it. Put the whole numerator in parentheses first, then flip every sign inside. This is the number one error on subtract-and-simplify.",
+  ex:L("2x&sup2; + 3 &minus; (x&sup2; + 7)",
+       "= 2x&sup2; + 3 &minus; x&sup2; &minus; 7&nbsp;&nbsp;(both signs flipped)",
+       "= x&sup2; &minus; 4")},
+ expr_vs_eq:{n:"Expression vs equation",
+  p:"An EXPRESSION has no equals sign, so you may not touch its denominators. You build up to a common denominator and keep it. An EQUATION has an equals sign, so you may multiply both sides by the LCD and the denominators vanish. Mixing these two up is a conceptual error, not a slip.",
+  ex:L(`expression: ${F("2x","x+1")} + ${F("x","x&minus;1")} &rarr; build up, keep the bottom`,
+       `equation: ${F("2x","x&minus;4")} + 2 = ${F("6x","x&minus;4")} &rarr; multiply it all away`)},
+ restrict:{n:"Restrictions and domain",
+  p:"Any input making a denominator zero is banned. Read the bans off the ORIGINAL denominators, before cancelling, because cancelling hides a ban without removing it. In equations, a solution equal to a banned value is thrown out (extraneous).",
+  ex:L("x&sup2; &minus; 5x + 6 = (x &minus; 2)(x &minus; 3) &rarr; x &ne; 2, x &ne; 3",
+       `${F("(x&minus;2)(x+2)","x &minus; 2")} = x + 2, but x &ne; 2 still`)},
+ kcf:{n:"Keep, change, flip",
+  p:"Dividing by a fraction equals multiplying by its reciprocal. Flip the SECOND fraction only. The same rule handles division by a whole number: 14 is 14/1, so dividing by 14 is multiplying by 1/14.",
+  ex:L(`${F("3x&sup3;","x&sup2;&minus;4")} &divide; ${F("6x&sup2;","(x&minus;2)&sup2;")} = ${F("3x&sup3;","x&sup2;&minus;4")} &middot; ${F("(x&minus;2)&sup2;","6x&sup2;")}`,
+       `${F("1","2")} &divide; 14 = ${F("1","2")} &middot; ${F("1","14")} = ${F("1","28")}`)},
+ complex:{n:"Complex fractions",
+  p:"A fraction with fractions inside it. Find the LCD of the SMALL denominators only, then multiply the entire top and the entire bottom by it. Multiplying by LCD over LCD is multiplying by 1, so the value is unchanged while the little fractions die.",
+  ex:L(`${F("3 &minus; "+F("4","x"),"2 + "+F("1","x"))} &rarr; inner LCD is x`,
+       `top: x(3 &minus; 4/x) = 3x &minus; 4`,
+       `bottom: x(2 + 1/x) = 2x + 1 &rarr; ${F("3x &minus; 4","2x + 1")}`)}
+};
+const kb=document.getElementById("kitbody");
+Object.entries(RULES).forEach(([k,r])=>{
+  const d=document.createElement("div");d.className="rulecard";
+  d.innerHTML=`<h3><span class="rid">${k}</span> ${r.n}</h3><p>${r.p}</p><div class="ex">${r.ex}</div>`;
+  kb.appendChild(d);
+});
+
+/* ---------- Problems ---------- */
+const P=[
+{t:"Find the domain of the function",e:`f(x) = ${F("2x + 6","x&sup2; &minus; 5x + 6")}`,
+ pre:["restrict","trinomial","signs"],
+ s:[
+ {r:"What domain means",a:"Domain is every number you are allowed to put in. For a fraction, only one thing is ever illegal: a zero on the bottom. So ignore the top entirely and ask what makes the denominator zero.",m:"solve: x&sup2; &minus; 5x + 6 = 0",w:"The numerator 2x + 6 can be any value at all, including zero. A fraction with zero on top is fine, it just equals 0. A fraction with zero on the bottom is undefined. That is the whole reason this question exists."},
+ {r:"Factor the denominator",a:"It is x&sup2; + bx + c with b = &minus;5 and c = 6. Hunt two numbers whose product is 6 and whose sum is &minus;5.",m:L("pairs of 6: 1&middot;6 and 2&middot;3","c is +, b is &minus; &rarr; both numbers negative","&minus;1 + &minus;6 = &minus;7 &nbsp;no","&minus;2 + &minus;3 = &minus;5 &nbsp;yes","(x &minus; 2)(x &minus; 3) = 0"),w:"Check it by FOIL: (x &minus; 2)(x &minus; 3) = x&sup2; &minus; 3x &minus; 2x + 6 = x&sup2; &minus; 5x + 6. Matches, so the factoring is right."},
+ {r:"Zero product property",a:"If two things multiply to zero, at least one of them is zero. Set each factor to zero separately.",m:L("x &minus; 2 = 0 &rarr; x = 2","x &minus; 3 = 0 &rarr; x = 3"),w:"This only works against zero. If the product were 6 you could not say 'one factor is 6', because 2 and 3 also multiply to 6. Zero is special."},
+ {r:"State the domain",a:"Those two values are banned. Everything else is allowed.",m:"all real x, x &ne; 2, x &ne; 3",w:"Interval form if your professor wants it: (&minus;&infin;, 2) U (2, 3) U (3, &infin;). Two punctures in the number line."}],
+ ans:"all real x such that x &ne; 2 and x &ne; 3",
+ trap:"Do not factor the top and cancel first. 2x + 6 = 2(x + 3) shares nothing with the bottom here, but even when something does cancel, the domain is still read off the ORIGINAL denominator. Cancelling hides a ban, it never lifts it."},
+
+{t:"Simplify the expression",e:`f(x) = ${F("x&sup3; + 4x&sup2;","x&sup2; + 3x &minus; 4")}`,
+ pre:["gcf","trinomial","signs","factor_vs_term"],
+ s:[
+ {r:"Plan",a:"Simplify means: factor the top, factor the bottom, cancel matching factors. Never multiply anything out. You cannot cancel out of an expanded form.",m:"factor &rarr; factor &rarr; cancel",w:"Factored form is the only form where cancelling is legal, because cancelling is really dividing top and bottom by the same nonzero thing."},
+ {r:"Factor the top (GCF)",a:"x&sup3; and 4x&sup2; both contain x&sup2;. Pull it out. Divide each term by x&sup2; to see what stays inside.",m:L("x&sup3; &divide; x&sup2; = x","4x&sup2; &divide; x&sup2; = 4","x&sup3; + 4x&sup2; = x&sup2;(x + 4)"),w:"x&sup3; &divide; x&sup2; = x because you subtract exponents: 3 &minus; 2 = 1. Multiply back to check: x&sup2;&middot;x + x&sup2;&middot;4 = x&sup3; + 4x&sup2;."},
+ {r:"Factor the bottom",a:"b = 3, c = &minus;4. Two numbers with product &minus;4 and sum 3.",m:L("c is negative &rarr; signs differ","pairs of 4: 1&middot;4 and 2&middot;2","+4 and &minus;1: product &minus;4, sum 3 &nbsp;yes","(x + 4)(x &minus; 1)"),w:"Check: (x + 4)(x &minus; 1) = x&sup2; &minus; x + 4x &minus; 4 = x&sup2; + 3x &minus; 4. Matches."},
+ {r:"Cancel the shared factor",a:"(x + 4) sits on top and on the bottom. It is a factor, so it goes.",m:`${F("x&sup2;(x + 4)","(x + 4)(x &minus; 1)")} = ${F("x&sup2;","x &minus; 1")}`,w:"You are dividing top and bottom by (x + 4), which is allowed because x + 4 is not zero in the domain. The x&sup2; and the (x &minus; 1) have nothing in common, so you stop here."}],
+ ans:F("x&sup2;","x &minus; 1"),
+ trap:"The leftover x&sup2; on top and the x in (x &minus; 1) look cancellable. They are not. The bottom's x is tied up inside a subtraction, so it is a term, not a factor."},
+
+{t:"Simplify the expression",e:`g(x) = ${F("3x&sup2; &minus; 4","2 &minus; 3x")}`,
+ pre:["dos","flip","factor_vs_term"],
+ s:[
+ {r:"Read it before you move",a:"A difference of squares needs both pieces to be perfect squares. 4 is 2&sup2;, but 3x&sup2; is not a square of anything (the square root of 3 is irrational). So as printed, the top does not factor and nothing can cancel.",m:L("printed: 3x&sup2; &minus; 4 &nbsp;does not factor","intended: 9x&sup2; &minus; 4 &nbsp;since 9x&sup2; = (3x)&sup2;"),w:"The worksheet's own answer, &minus;3x &minus; 2, is only reachable from 9x&sup2; &minus; 4. That is how you know it is a typo rather than a trick."},
+ {r:"Difference of squares",a:"Use a&sup2; &minus; b&sup2; = (a &minus; b)(a + b) with a = 3x and b = 2.",m:L("a&sup2; = 9x&sup2; &rarr; a = 3x","b&sup2; = 4 &rarr; b = 2","9x&sup2; &minus; 4 = (3x &minus; 2)(3x + 2)"),w:"Check by FOIL: 9x&sup2; + 6x &minus; 6x &minus; 4. The middle terms cancel, which is exactly why there is no x term in the original."},
+ {r:"The bottom is backwards",a:"The denominator 2 &minus; 3x is the factor (3x &minus; 2) with its signs reversed. Factor out &minus;1 to turn it around.",m:L("2 &minus; 3x","= &minus;1(&minus;2 + 3x)","= &minus;(3x &minus; 2)"),w:"Verify by distributing: &minus;(3x &minus; 2) = &minus;3x + 2 = 2 &minus; 3x. Same thing. This is the step almost everyone skips, and without it nothing cancels."},
+ {r:"Cancel and clean up",a:"Now (3x &minus; 2) appears top and bottom. The &minus;1 has nowhere to go but out front.",m:L(`${F("(3x &minus; 2)(3x + 2)","&minus;(3x &minus; 2)")}`,"= &minus;(3x + 2)","= &minus;3x &minus; 2"),w:"Distribute the minus into both terms for the final form. &minus;(3x + 2) and &minus;3x &minus; 2 are the same answer written two ways."}],
+ ans:"&minus;3x &minus; 2",
+ trap:"Cancelling (3x &minus; 2) against (2 &minus; 3x) and writing 1 instead of &minus;1. They are negatives of each other, so that quotient is &minus;1. Sign lost, whole answer wrong.",
+ flag:"The worksheet prints the numerator as 3x&sup2; &minus; 4, but 3x&sup2; is not a perfect square and that version does not simplify at all. The printed answer only works for 9x&sup2; &minus; 4. Assume 9x&sup2; on the exam, and ask your professor to confirm."},
+
+{t:"Find the product and simplify",e:`${F("2x","4x &minus; 20")} &middot; ${F("x&sup2; &minus; 25","5")}`,
+ pre:["gcf","dos","factor_vs_term"],
+ s:[
+ {r:"Factor every piece first",a:"Four pieces: two tops, two bottoms. Factor all of them before multiplying anything.",m:L("2x: already factored","4x &minus; 20 = 4(x &minus; 5) &nbsp;(GCF 4)","x&sup2; &minus; 25 = (x &minus; 5)(x + 5) &nbsp;(squares: x&sup2; and 5&sup2;)","5: already factored"),w:"If you multiplied out instead you would get a cubic over a mess, with no way back. Factoring first is not a preference, it is the only route."},
+ {r:"Multiply straight across",a:"Top times top over bottom times bottom. Leave everything factored, do not distribute.",m:F("2x(x &minus; 5)(x + 5)","4(x &minus; 5) &middot; 5"),w:"Multiplying fractions never needs a common denominator. That is only for adding and subtracting. This is the easy operation."},
+ {r:"Cancel the matching factor",a:"(x &minus; 5) appears once on top and once on the bottom.",m:F("2x(x + 5)","4 &middot; 5")+" = "+F("2x(x + 5)","20"),w:"Cross it off in both places and physically mark it. Cancelling two different factors in one glance is how a factor goes missing."},
+ {r:"Reduce the numbers",a:"Numbers cancel exactly like variable factors do. 2 and 20 share a factor of 2.",m:L("2 &divide; 2 = 1","20 &divide; 2 = 10",F("x(x + 5)","10")),w:"Leave it factored as x(x + 5). Expanding to (x&sup2; + 5x)/10 is not more simplified, and factored form is what the answer key shows."}],
+ ans:F("x(x + 5)","10"),
+ trap:"Writing 4x &minus; 20 = 4(x &minus; 20) by only dividing the first term. Divide EVERY term by the GCF: 4x &divide; 4 = x and &minus;20 &divide; 4 = &minus;5."},
+
+{t:"Find the product and simplify",e:`${F("x&sup2; &minus; 5x + 6","x&sup2; + 3x + 2")} &middot; ${F("x&sup2; &minus; 1","x&sup2; &minus; 3x")}`,
+ pre:["trinomial","signs","dos","gcf","factor_vs_term"],
+ s:[
+ {r:"Four factorings, one at a time",a:"Do not try to see the whole problem at once. Factor each of the four pieces on its own line.",m:L("x&sup2; &minus; 5x + 6 = (x &minus; 2)(x &minus; 3) &nbsp;[&minus;2, &minus;3]","x&sup2; + 3x + 2 = (x + 1)(x + 2) &nbsp;[+1, +2]","x&sup2; &minus; 1 = (x &minus; 1)(x + 1) &nbsp;[squares]","x&sup2; &minus; 3x = x(x &minus; 3) &nbsp;[GCF x]"),w:"Each one uses a different tool: two trinomial hunts, one difference of squares, one GCF. Recognising which tool applies is the actual skill being tested."},
+ {r:"Build one fraction",a:"Stack all four factored pieces into a single fraction. Write it out fully before you cancel anything.",m:F("(x &minus; 2)(x &minus; 3)(x &minus; 1)(x + 1)","(x + 1)(x + 2) &middot; x(x &minus; 3)"),w:"Cancelling across two separate fractions in your head is where factors vanish. One fraction, then cancel."},
+ {r:"Cancel pair by pair",a:"Scan the top factors against the bottom factors. Two matches here.",m:L("(x &minus; 3) top and bottom &rarr; gone","(x + 1) top and bottom &rarr; gone","left on top: (x &minus; 2)(x &minus; 1)","left on bottom: (x + 2) &middot; x"),w:"Cross off one pair, rewrite the line, then look again. Treating it as two separate passes is slower and far more accurate."},
+ {r:"Write the result",a:"Put the survivors together, still factored.",m:F("(x &minus; 2)(x &minus; 1)","x(x + 2)"),w:"Nothing left matches: (x &minus; 2) and (x + 2) are different factors, and (x &minus; 1) has no partner."}],
+ ans:F("(x &minus; 2)(x &minus; 1)","x(x + 2)"),
+ trap:"Cancelling (x &minus; 2) against (x + 2). Opposite signs means different factors. Only identical factors cancel, or reversed ones after you pull out &minus;1."},
+
+{t:"Find the quotient and simplify the result",e:`${F("3x&sup3;","x&sup2; &minus; 4")} &divide; ${F("6x&sup2;","(x &minus; 2)&sup2;")}`,
+ pre:["kcf","dos","factor_vs_term"],
+ s:[
+ {r:"Keep, change, flip",a:"Division by a fraction is multiplication by its reciprocal. Flip the second fraction only, and never the first.",m:`${F("3x&sup3;","x&sup2; &minus; 4")} &middot; ${F("(x &minus; 2)&sup2;","6x&sup2;")}`,w:"Reciprocal means swap top and bottom. Once it is a multiplication, this problem is the same type as the two before it."},
+ {r:"Factor what can factor",a:"x&sup2; &minus; 4 is a difference of squares. (x &minus; 2)&sup2; is already factored, it just means (x &minus; 2)(x &minus; 2).",m:L("x&sup2; &minus; 4 = (x &minus; 2)(x + 2)",F("3x&sup3;","(x &minus; 2)(x + 2)")+" &middot; "+F("(x &minus; 2)(x &minus; 2)","6x&sup2;")),w:"Writing the square out as two copies makes the cancelling visible: one copy will pair off with the bottom, one survives."},
+ {r:"Reduce the x powers",a:"3x&sup3; over 6x&sup2;. Handle the numbers and the variables separately.",m:L("3 &divide; 3 = 1, 6 &divide; 3 = 2 &rarr; 3/6 = 1/2","x&sup3; &divide; x&sup2; = x&sup1; = x","so 3x&sup3;/6x&sup2; = x/2"),w:"3/6 is one half. This is the exact spot where the worksheet answer goes wrong by writing a 3 on the bottom."},
+ {r:"Cancel one (x &minus; 2)",a:"Two copies on top, one on the bottom. One pair cancels, one copy is left upstairs.",m:L("(x &minus; 2)(x &minus; 2) &divide; (x &minus; 2) = (x &minus; 2)"),w:"Subtract the counts: two on top minus one on bottom leaves one on top. Same rule as exponents."},
+ {r:"Assemble",a:"Collect every survivor into one fraction.",m:L("top: x(x &minus; 2)","bottom: 2(x + 2)",F("x(x &minus; 2)","2(x + 2)")),w:"Leave it factored. This is the simplified form."}],
+ ans:F("x(x &minus; 2)","2(x + 2)"),
+ trap:"Flipping the first fraction instead of the second, or flipping both. Keep the first exactly as it is.",
+ flag:"The worksheet answer has 3(x + 2) on the bottom. That is wrong: 3x&sup3; divided by 6x&sup2; is x/2, not x/3. The correct denominator is 2(x + 2)."},
+
+{t:"Find the quotient and simplify",e:`${F("x&sup2; &minus; 6x &minus; 7","2x + 1")} &divide; ${F("x&sup2; &minus; 1","2x + 1")}`,
+ pre:["kcf","trinomial","signs","dos"],
+ s:[
+ {r:"Keep, change, flip",a:"Flip the second fraction and multiply.",m:`${F("x&sup2; &minus; 6x &minus; 7","2x + 1")} &middot; ${F("2x + 1","x&sup2; &minus; 1")}`,w:"Notice what just happened: (2x + 1) was on the bottom of the first fraction and is now also on the top of the second. It will cancel completely."},
+ {r:"Factor the trinomial",a:"b = &minus;6, c = &minus;7. Product &minus;7, sum &minus;6.",m:L("c is negative &rarr; signs differ","pairs of 7: 1&middot;7 only","&minus;7 and +1: product &minus;7, sum &minus;6 &nbsp;yes","(x &minus; 7)(x + 1)"),w:"Check: (x &minus; 7)(x + 1) = x&sup2; + x &minus; 7x &minus; 7 = x&sup2; &minus; 6x &minus; 7. Matches."},
+ {r:"Factor the difference of squares",a:"x&sup2; &minus; 1 is x&sup2; &minus; 1&sup2;.",m:"x&sup2; &minus; 1 = (x &minus; 1)(x + 1)",w:"1 is a perfect square, which is easy to miss because it is invisible. Any time you see something minus 1, check for this."},
+ {r:"Cancel both pairs",a:"(2x + 1) cancels, and both factorings produced an (x + 1), so that cancels too.",m:L(F("(x &minus; 7)(x + 1)(2x + 1)","(2x + 1)(x &minus; 1)(x + 1)"),"= "+F("x &minus; 7","x &minus; 1")),w:"Spotting the second (x + 1) is the whole point of the problem. The (2x + 1) is there to look intimidating and then disappear."}],
+ ans:F("x &minus; 7","x &minus; 1"),
+ trap:"Leaving (x + 1) in the denominator, which is what the printed key does. A factor that appears on BOTH sides cannot survive on one of them.",
+ flag:"The worksheet answer says (x &minus; 7)/(x + 1). That cannot be right: the (x + 1) appears in BOTH the top and the bottom, so it cancels and cannot survive in the denominator. The correct answer is (x &minus; 7)/(x &minus; 1)."},
+
+{t:"Subtract and simplify if possible",e:`${F("2x&sup2; + 3","x + 2")} &minus; ${F("x&sup2; + 7","x + 2")}`,
+ pre:["minus","dos","restrict","expr_vs_eq"],
+ s:[
+ {r:"Check the denominators",a:"Both are x + 2, already identical. So no LCD work is needed. Keep that denominator and subtract the tops.",m:F("2x&sup2; + 3 &minus; (x&sup2; + 7)","x + 2"),w:"There is no equals sign here, so the denominator stays. You never clear it in an expression, you only clear it in an equation."},
+ {r:"Parentheses are mandatory",a:"The minus applies to the entire second numerator, so wrap it before you do anything else.",m:"&minus;(x&sup2; + 7) = &minus;x&sup2; &minus; 7",w:"Without parentheses you write &minus;x&sup2; + 7 and lose 14 from the answer. If you write the parentheses every time, you cannot make this mistake."},
+ {r:"Combine like terms",a:"Now collect the x&sup2; terms and the constants separately.",m:L("2x&sup2; + 3 &minus; x&sup2; &minus; 7","x&sup2; terms: 2x&sup2; &minus; x&sup2; = x&sup2;","constants: 3 &minus; 7 = &minus;4","numerator = x&sup2; &minus; 4"),w:"2x&sup2; &minus; x&sup2; = 1x&sup2; = x&sup2;, the same way 2 apples minus 1 apple is 1 apple."},
+ {r:"Always re-check for factoring",a:"The new numerator is a difference of squares, and the bottom is one of its factors.",m:L(F("x&sup2; &minus; 4","x + 2")+" = "+F("(x &minus; 2)(x + 2)","x + 2"),"= x &minus; 2"),w:"The phrase 'simplify if possible' is the hint. Combining the tops is only half the problem; the factoring is the other half."},
+ {r:"Carry the restriction",a:"The original bottom was x + 2, so x = &minus;2 was banned from the start and still is.",m:"x &minus; 2, with x &ne; &minus;2",w:"The answer x &minus; 2 is a polynomial and looks safe at any input, but it only equals the original expression where the original was defined."}],
+ ans:"x &minus; 2 (with x &ne; &minus;2)",
+ trap:"Stopping at (x&sup2; &minus; 4)/(x + 2) and calling it done. The instruction says simplify if possible, and it is possible."},
+
+{t:"Add the rational expressions, find the LCD first",e:`${F("2x","x + 1")} + ${F("x","x &minus; 1")}`,
+ pre:["expr_vs_eq","dos","factor_vs_term"],
+ s:[
+ {r:"Why you need an LCD",a:"You cannot add fractions with different bottoms, the same as 1/2 + 1/3. Both have to be rewritten over the same denominator first.",m:"need: one shared denominator",w:"This is an expression, not an equation. You are not allowed to multiply the denominators away; you have to carry them through to the answer."},
+ {r:"Find the LCD",a:"The two denominators are (x + 1) and (x &minus; 1). They share no factor, so the LCD is simply their product.",m:L("LCD = (x + 1)(x &minus; 1)","= x&sup2; &minus; 1 &nbsp;(difference of squares)"),w:"Do not hunt for something smaller. When denominators have nothing in common, the product IS the least common denominator."},
+ {r:"Build up each fraction",a:"Ask what each fraction is missing, then multiply top AND bottom by exactly that.",m:L("first is missing (x &minus; 1):",F("2x(x &minus; 1)","(x + 1)(x &minus; 1)"),"second is missing (x + 1):",F("x(x + 1)","(x + 1)(x &minus; 1)")),w:"Multiplying top and bottom by the same thing is multiplying by 1, so the value does not change. Multiplying only the bottom would change the value and is wrong."},
+ {r:"Expand the numerators",a:"Now distribute each top. Keep the LCD untouched underneath.",m:L("2x(x &minus; 1) = 2x&sup2; &minus; 2x","x(x + 1) = x&sup2; + x"),w:"Tops get expanded because they are being added. Bottoms stay factored because you still need to look for cancelling at the end."},
+ {r:"Add and collect",a:"Add the two numerators over the single denominator.",m:L("2x&sup2; &minus; 2x + x&sup2; + x","x&sup2; terms: 2x&sup2; + x&sup2; = 3x&sup2;","x terms: &minus;2x + x = &minus;x","numerator = 3x&sup2; &minus; x"),w:"&minus;2x + x = &minus;x, not &minus;3x. Adding a positive to a negative moves toward zero."},
+ {r:"Check for cancelling",a:"Factor the new top and compare against the factored bottom.",m:L("3x&sup2; &minus; x = x(3x &minus; 1)",F("x(3x &minus; 1)","(x &minus; 1)(x + 1)")),w:"x, (3x &minus; 1), (x &minus; 1) and (x + 1) are all different factors, so nothing cancels. It is already in simplest form."}],
+ ans:F("3x&sup2; &minus; x","x&sup2; &minus; 1"),
+ trap:"Multiplying both sides by the LCD to make the fractions disappear. That move belongs to equations. Here there is no equals sign, so there are no sides."},
+
+{t:"Perform the indicated operations",e:`${F("2","x&sup2; &minus; 3x &minus; 4")} &minus; ${F("1","x &minus; 4")}`,
+ pre:["trinomial","signs","minus","expr_vs_eq"],
+ s:[
+ {r:"Factor before anything else",a:"You cannot see the LCD until every denominator is factored.",m:L("b = &minus;3, c = &minus;4 &rarr; signs differ","&minus;4 and +1: product &minus;4, sum &minus;3 &nbsp;yes","x&sup2; &minus; 3x &minus; 4 = (x &minus; 4)(x + 1)"),w:"Check: (x &minus; 4)(x + 1) = x&sup2; + x &minus; 4x &minus; 4 = x&sup2; &minus; 3x &minus; 4. Matches."},
+ {r:"Read off the LCD",a:"The denominators are (x &minus; 4)(x + 1) and (x &minus; 4). The second is already inside the first, so the first one is the LCD.",m:"LCD = (x &minus; 4)(x + 1)",w:"When one denominator is a factor of the other, the bigger one is the LCD. Multiplying them together would give you (x &minus; 4)&sup2;(x + 1), which works but is unnecessarily large."},
+ {r:"Build up only what needs it",a:"The first fraction already sits on the LCD. The second is missing (x + 1).",m:L("first: leave alone",F("1","x &minus; 4")+" &middot; "+F("x + 1","x + 1")+" = "+F("x + 1","(x &minus; 4)(x + 1)")),w:"Leaving the first fraction alone is correct, not lazy. It is already over the LCD."},
+ {r:"Subtract with parentheses",a:"Put the second numerator in parentheses and flip every sign inside it.",m:L(F("2 &minus; (x + 1)","(x &minus; 4)(x + 1)"),"2 &minus; x &minus; 1","= 1 &minus; x"),w:"2 &minus; 1 = 1, and the &minus;x has nothing to combine with. Write it as 1 &minus; x, not x &minus; 1; those are negatives of each other."},
+ {r:"Check for cancelling",a:"Does 1 &minus; x share a factor with (x &minus; 4)(x + 1)?",m:L(F("1 &minus; x","(x &minus; 4)(x + 1)")," = "+F("1 &minus; x","x&sup2; &minus; 3x &minus; 4")),w:"1 &minus; x is &minus;(x &minus; 1), and (x &minus; 1) is not one of the bottom factors, so nothing cancels. Either the factored or the expanded denominator is an acceptable final form."}],
+ ans:F("1 &minus; x","x&sup2; &minus; 3x &minus; 4"),
+ trap:"Writing the numerator as x &minus; 1. That is the right digits with the wrong sign, and it makes the whole answer the negative of the truth."},
+
+{t:"Solve the equation for x",e:`${F("2x","x &minus; 4")} + 2 = ${F("6x","x &minus; 4")}`,
+ pre:["expr_vs_eq","restrict"],
+ s:[
+ {r:"Notice it is an equation",a:"There is an equals sign, so you are allowed to multiply both sides by the LCD and destroy the denominators. That is the opposite of what you do with an expression.",m:"LCD = x &minus; 4",w:"This is the single biggest conceptual fork in the chapter. Equation: clear the fractions. Expression: keep them."},
+ {r:"Write the restriction first",a:"Before solving, note which value is banned, so you can throw out a bad answer later.",m:L("x &minus; 4 = 0 &rarr; x = 4","so x &ne; 4"),w:"Multiplying both sides by (x &minus; 4) is only legal when that quantity is not zero. If a solution comes back as 4, it was never a real solution."},
+ {r:"Multiply EVERY term",a:"Each of the three terms gets multiplied, including the plain 2 with no fraction.",m:L("(x &minus; 4) &middot; "+F("2x","x &minus; 4")+" = 2x","(x &minus; 4) &middot; 2 = 2(x &minus; 4)","(x &minus; 4) &middot; "+F("6x","x &minus; 4")+" = 6x","2x + 2(x &minus; 4) = 6x"),w:"Forgetting the lonely 2 is the usual error. If one term is skipped the equation stops being equivalent and the answer is garbage."},
+ {r:"Distribute and collect",a:"Open the parentheses, then combine the x terms on the left.",m:L("2(x &minus; 4) = 2x &minus; 8","2x + 2x &minus; 8 = 6x","4x &minus; 8 = 6x"),w:"2x + 2x = 4x. Both are x terms so they add directly."},
+ {r:"Isolate x",a:"Get the x terms on one side and the number on the other.",m:L("4x &minus; 8 = 6x","subtract 4x from both sides","&minus;8 = 2x","divide both sides by 2","x = &minus;4"),w:"Moving the smaller x term avoids a negative coefficient. 6x &minus; 4x = 2x."},
+ {r:"Check against the restriction",a:"Is &minus;4 the banned value 4?",m:L("&minus;4 &ne; 4 &rarr; valid"),w:"&minus;4 and 4 are different numbers, so nothing is thrown out. Plug in if you want: 2(&minus;4)/(&minus;8) + 2 = 1 + 2 = 3, and 6(&minus;4)/(&minus;8) = 3. Equal."}],
+ ans:"x = &minus;4",
+ trap:"Multiplying only the two fractions by the LCD and leaving the 2 alone. Every term on both sides, no exceptions."},
+
+{t:"Solve the equation for x",e:`${F("1","x + 4")} &minus; ${F("2x &minus; 3","x&sup2; + 5x + 4")} = 1`,
+ pre:["expr_vs_eq","restrict","trinomial","minus"],
+ s:[
+ {r:"Factor, then restrict",a:"Factor the quadratic denominator, then list every banned value from every denominator.",m:L("b = 5, c = 4 &rarr; both +","1 and 4: product 4, sum 5 &nbsp;yes","x&sup2; + 5x + 4 = (x + 1)(x + 4)","banned: x &ne; &minus;1, x &ne; &minus;4"),w:"x + 1 = 0 gives x = &minus;1 and x + 4 = 0 gives x = &minus;4. Both bans come out of this one factoring."},
+ {r:"Identify the LCD",a:"Denominators are (x + 4) and (x + 1)(x + 4). The second contains the first.",m:"LCD = (x + 1)(x + 4)",w:"Same situation as problem 10: the larger denominator already is the LCD."},
+ {r:"Multiply every term by the LCD",a:"Three terms again, and the third one is a bare 1.",m:L("(x+1)(x+4) &middot; "+F("1","x + 4")+" = x + 1","(x+1)(x+4) &middot; "+F("2x &minus; 3","(x+1)(x+4)")+" = 2x &minus; 3","(x+1)(x+4) &middot; 1 = (x+1)(x+4)","(x + 1) &minus; (2x &minus; 3) = (x + 1)(x + 4)"),w:"The right side was just 1, so it becomes the entire LCD. Leaving a 1 there is the most common wreck on this problem."},
+ {r:"Simplify the left side",a:"Distribute the minus across (2x &minus; 3).",m:L("x + 1 &minus; 2x + 3","x terms: x &minus; 2x = &minus;x","constants: 1 + 3 = 4","left = &minus;x + 4"),w:"&minus;(2x &minus; 3) = &minus;2x + 3. The minus flips BOTH signs, so &minus;3 becomes +3."},
+ {r:"Expand the right side",a:"FOIL (x + 1)(x + 4).",m:L("x&middot;x = x&sup2;","x&middot;4 = 4x","1&middot;x = x","1&middot;4 = 4","right = x&sup2; + 5x + 4"),w:"It had to come back to x&sup2; + 5x + 4, since that is what you factored in step 1. Good self-check."},
+ {r:"Set equal to zero",a:"It is quadratic now, so move everything to one side.",m:L("&minus;x + 4 = x&sup2; + 5x + 4","subtract 4 from both sides: &minus;x = x&sup2; + 5x","add x to both sides: 0 = x&sup2; + 6x"),w:"5x + x = 6x. The constant 4 appears on both sides and cancels out entirely."},
+ {r:"Factor and solve",a:"GCF of x, then zero product.",m:L("x&sup2; + 6x = x(x + 6) = 0","x = 0 &nbsp;or&nbsp; x + 6 = 0","x = 0 or x = &minus;6"),w:"Do not divide both sides by x. That throws away the solution x = 0. Factor instead, always."},
+ {r:"Check both answers",a:"Compare against the banned list, then test them.",m:L("banned were &minus;1 and &minus;4","0 is fine, &minus;6 is fine","x = &minus;6: 1/(&minus;2) &minus; (&minus;15)/10 = &minus;0.5 + 1.5 = 1 &nbsp;true"),w:"Both survive. Checking matters here because the worksheet key lists only one of them."}],
+ ans:"x = 0 or x = &minus;6",
+ trap:"Dividing by x at the last step to 'simplify', which silently deletes x = 0. When a side factors, factor it.",
+ flag:"The worksheet lists only x = 0. x = &minus;6 is also a real solution: it breaks no restriction and it checks out (1/&minus;2 &minus; (&minus;15)/10 = &minus;0.5 + 1.5 = 1). The answer key is incomplete."},
+
+{t:"Solve the equation",e:`${F("4x","x &minus; 3")} = ${F("x + 3","2")}`,
+ pre:["restrict","dos","trinomial","signs"],
+ s:[
+ {r:"Restriction first",a:"One denominator has a variable in it.",m:L("x &minus; 3 = 0 &rarr; x &ne; 3"),w:"The 2 on the other side can never be zero, so it contributes no restriction. Only variable denominators ban anything."},
+ {r:"Cross multiply",a:"Exactly one fraction on each side, so you may cross multiply: top left times bottom right equals top right times bottom left.",m:L("4x &middot; 2 = (x + 3)(x &minus; 3)","8x = (x + 3)(x &minus; 3)"),w:"Cross multiplying is only legal in this shape, one single fraction per side. With three terms, like problem 11, you must multiply through by the LCD instead."},
+ {r:"Expand the right side",a:"It is a difference of squares pattern read backwards.",m:L("(x + 3)(x &minus; 3)","= x&sup2; &minus; 3x + 3x &minus; 9","= x&sup2; &minus; 9"),w:"The middle terms &minus;3x and +3x cancel. That is why the product of a sum and a difference has no middle term."},
+ {r:"Set to zero",a:"Quadratic, so collect everything on one side.",m:L("8x = x&sup2; &minus; 9","0 = x&sup2; &minus; 8x &minus; 9"),w:"Subtract 8x from both sides. Keeping the x&sup2; positive makes the factoring hunt easier."},
+ {r:"Factor and solve",a:"b = &minus;8, c = &minus;9. Product &minus;9, sum &minus;8.",m:L("c negative &rarr; signs differ","pairs of 9: 1&middot;9, 3&middot;3","&minus;9 and +1: product &minus;9, sum &minus;8 &nbsp;yes","(x &minus; 9)(x + 1) = 0","x = 9 or x = &minus;1"),w:"Check: (x &minus; 9)(x + 1) = x&sup2; + x &minus; 9x &minus; 9 = x&sup2; &minus; 8x &minus; 9. Matches."},
+ {r:"Check the restriction",a:"Neither answer is the banned 3.",m:"x = 9 and x = &minus;1 both valid",w:"Spot check x = 9: left is 36/6 = 6, right is 12/2 = 6. Equal."}],
+ ans:"x = 9 or x = &minus;1",
+ trap:"Cross multiplying when a side has more than one term, for example in problem 11. Count the terms before you reach for this move.",
+ flag:"The worksheet says 'solve for y', but there is no y anywhere in the equation. It is asking for x."},
+
+{t:"Six times the reciprocal of a number equals 2 times the reciprocal of 3. Find the number.",e:`<span class="word">Translate the words into one equation, then solve.</span>`,
+ pre:["restrict","kcf"],
+ s:[
+ {r:"Name the unknown",a:"Let n be the number. Reciprocal means flip it, so the reciprocal of n is 1/n.",m:L("number: n","reciprocal of n: "+F("1","n"),"n &ne; 0"),w:"Reciprocal of 5 is 1/5, reciprocal of 2/3 is 3/2. n cannot be 0, because 1/0 is undefined."},
+ {r:"Translate phrase by phrase",a:"Go left to right and convert each chunk literally.",m:L("'six times the reciprocal of a number' &rarr; 6 &middot; "+F("1","n")+" = "+F("6","n"),"'equals' &rarr; =","'2 times the reciprocal of 3' &rarr; 2 &middot; "+F("1","3")+" = "+F("2","3"),F("6","n")+" = "+F("2","3")),w:"'Times' is multiply, 'the reciprocal of 3' is 1/3. 2 &middot; 1/3 = 2/3, so the right side is just a number."},
+ {r:"Cross multiply",a:"One fraction on each side, so cross multiplying is legal.",m:L("6 &middot; 3 = 2 &middot; n","18 = 2n"),w:"Same move as problem 13, and the same condition: a single fraction on each side."},
+ {r:"Solve and check",a:"Divide both sides by 2, then verify against the original sentence.",m:L("n = 18 &divide; 2 = 9","check: "+F("6","9")+" = "+F("2","3")+" &nbsp;true"),w:"6/9 reduces to 2/3 by dividing both by 3. The sentence is satisfied, and 9 is not 0, so it is valid."}],
+ ans:"the number is 9",
+ trap:"Reading 'six times the reciprocal' as the reciprocal of 6n. It is 6 &middot; (1/n) = 6/n, not 1/(6n)."},
+
+{t:"One custodian cleans the area in 4 hours. With a second custodian helping, the job takes 2 and 2/3 hours. How long would the second custodian take alone?",e:`<span class="word">A shared-work problem. Work with rates, never with times.</span>`,
+ pre:["kcf","expr_vs_eq"],
+ s:[
+ {r:"Times do not add, rates do",a:"Turn every time into a rate: one whole job divided by the hours it takes. A rate is the fraction of the job finished per hour.",m:L("alone in 4 hours &rarr; rate = "+F("1","4")+" job per hour","alone in t hours &rarr; rate = "+F("1","t")),w:"If someone takes 4 hours for a job, in one hour they finish a quarter of it. Rates can be added because two people working for one hour finish the sum of their hourly amounts. Times cannot be added, which is why 4 + t is meaningless here."},
+ {r:"Convert the mixed number",a:"2 and 2/3 has to become a single improper fraction before you can take its reciprocal.",m:L("2 = "+F("6","3"),F("6","3")+" + "+F("2","3")+" = "+F("8","3")+" hours"),w:"Multiply the whole number by the denominator: 2 &middot; 3 = 6 thirds, then add the 2 thirds already there."},
+ {r:"Turn the team time into a team rate",a:"One job divided by 8/3 hours. Dividing by a fraction means multiplying by its reciprocal.",m:L("1 &divide; "+F("8","3")+" = 1 &middot; "+F("3","8")+" = "+F("3","8")," together: "+F("3","8")+" of the job per hour"),w:"Sanity check: 3/8 is a bit less than a half, so the pair finishes a bit under half the job each hour. In under 3 hours they are done. Consistent."},
+ {r:"Write the equation",a:"First person's rate plus second person's rate equals the combined rate.",m:F("1","4")+" + "+F("1","t")+" = "+F("3","8"),w:"This is an equation, so you could clear the denominators with the LCD 8t. Here it is faster to just isolate 1/t."},
+ {r:"Isolate 1/t",a:"Subtract 1/4 from both sides. Convert to eighths first so the subtraction is easy.",m:L(F("1","4")+" = "+F("2","8"),F("1","t")+" = "+F("3","8")+" &minus; "+F("2","8"),F("1","t")+" = "+F("1","8")),w:"1/4 = 2/8 because multiplying top and bottom by 2 does not change the value."},
+ {r:"Flip to get t",a:"If 1/t equals 1/8, then t equals 8.",m:L(F("1","t")+" = "+F("1","8")," t = 8 hours"),w:"Two reciprocals are equal only when the numbers themselves are equal. Reality check: the helper (8 h) is slower than the first custodian (4 h), and together they beat 4 hours. Both must be true, and they are."}],
+ ans:"the second custodian would take 8 hours alone",
+ trap:"Setting up 4 + t = 8/3, or subtracting times: 8/3 &minus; 4 gives a negative number of hours, which should tell you immediately that times were the wrong quantity."},
+
+{t:"Simplify the complex fraction",e:F("3 &minus; "+F("4","x"),"2 + "+F("1","x")),
+ pre:["complex","gcf"],
+ s:[
+ {r:"See the structure",a:"There is a big dividing line, and small fractions above and below it. Ignore the big line for a moment and look only at the small denominators.",m:L("small denominators: x and x","inner LCD = x"),w:"The big line is just division. What makes this ugly is the little fractions, and the plan is to kill them."},
+ {r:"Multiply by x over x",a:"Multiply the entire numerator and the entire denominator by the inner LCD.",m:F("x(3 &minus; "+F("4","x")+")","x(2 + "+F("1","x")+")"),w:"x/x = 1, so you have multiplied by 1 and the value is unchanged. This one move handles every complex fraction in the chapter."},
+ {r:"Distribute on top",a:"Hand the x to each term inside the numerator.",m:L("x &middot; 3 = 3x","x &middot; "+F("4","x")+" = 4","top = 3x &minus; 4"),w:"x &middot; 4/x = 4x/x = 4. The x cancels, and that is the entire payoff of the method."},
+ {r:"Distribute on the bottom",a:"Same move underneath.",m:L("x &middot; 2 = 2x","x &middot; "+F("1","x")+" = 1","bottom = 2x + 1"),w:"x &middot; 1/x = 1. Every small fraction is now gone."},
+ {r:"Check for factoring",a:"Look for a GCF or a pattern in either piece.",m:L(F("3x &minus; 4","2x + 1"),"3x &minus; 4: no common factor","2x + 1: no common factor"),w:"Nothing factors, so nothing cancels and this is final."}],
+ ans:F("3x &minus; 4","2x + 1"),
+ trap:"Cancelling the x in 3x against the x in 2x. Both are tied up in sums, so they are terms, not factors."},
+
+{t:"Simplify the complex fraction",e:F("x<sup>&minus;2</sup>","x<sup>&minus;1</sup> + y<sup>&minus;1</sup>"),
+ pre:["complex","gcf","factor_vs_term"],
+ s:[
+ {r:"Negative exponents mean reciprocals",a:"A negative exponent is not a negative number. It means one over that thing to the positive power. Rewrite all three.",m:L("x<sup>&minus;2</sup> = "+F("1","x&sup2;"),"x<sup>&minus;1</sup> = "+F("1","x"),"y<sup>&minus;1</sup> = "+F("1","y"),F(F("1","x&sup2;"),F("1","x")+" + "+F("1","y"))),w:"x<sup>&minus;2</sup> is 1/x&sup2;, never &minus;x&sup2;. Once rewritten, this is just a complex fraction like the last problem."},
+ {r:"Find the inner LCD",a:"The small denominators are x&sup2;, x and y. Take the highest power of each variable that shows up.",m:L("x appears as x&sup2; and as x &rarr; use x&sup2;","y appears as y &rarr; use y","inner LCD = x&sup2;y"),w:"x&sup2; covers both x&sup2; and x, because x divides into x&sup2;. You never need x&sup3; here."},
+ {r:"Multiply the top",a:"Multiply the numerator by x&sup2;y.",m:L("x&sup2;y &middot; "+F("1","x&sup2;"),"= "+F("x&sup2;y","x&sup2;")," = y"),w:"The x&sup2; cancels completely and a bare y is left. Only a factor could cancel like that, and x&sup2; is one."},
+ {r:"Multiply the bottom",a:"Distribute x&sup2;y to BOTH terms in the denominator.",m:L("x&sup2;y &middot; "+F("1","x")+" = "+F("x&sup2;y","x")+" = xy","x&sup2;y &middot; "+F("1","y")+" = "+F("x&sup2;y","y")+" = x&sup2;","bottom = xy + x&sup2;"),w:"x&sup2;/x = x, so the first term becomes xy. In the second the y cancels and x&sup2; stays. Two terms in, two terms out."},
+ {r:"Factor the bottom",a:"xy and x&sup2; both contain x. Pull it out.",m:L("xy + x&sup2; = x(y + x)","= x(x + y)",F("y","x(x + y)")),w:"y + x and x + y are the same thing, since addition can be reordered. Writing x + y just looks more standard."},
+ {r:"Check for cancelling",a:"Is there a y factor on the bottom to pair with the y on top?",m:L("bottom factors: x and (x + y)","y is a TERM inside (x + y), not a factor","nothing cancels"),w:"This is the exact trap the problem is built around. The y on top cannot touch the y inside (x + y)."}],
+ ans:F("y","x(x + y)"),
+ trap:"Cancelling the top y against the y in (x + y) to get 1/x. The bottom y is locked inside a sum, so it is untouchable."},
+
+{t:"If y varies directly as x, find the constant of variation and the equation, given y = 2 when x = 2/3",e:`<span class="word">Direct variation. Start from the template equation.</span>`,
+ pre:["kcf"],
+ s:[
+ {r:"The template",a:"'y varies directly as x' always means the same equation. Memorise it: y = kx, where k is the constant of variation.",m:"y = kx",w:"Direct means they move together: double x and y doubles. If it said 'varies inversely' the template would be y = k/x instead. Know both."},
+ {r:"Substitute the given pair",a:"You were handed one matching pair of values. Put them in to pin down k.",m:L("y = 2, x = "+F("2","3"),"2 = k &middot; "+F("2","3")),w:"A single pair is enough, because k is the only unknown once x and y are filled in."},
+ {r:"Solve for k",a:"k is multiplied by 2/3, so divide both sides by 2/3. Dividing by a fraction means multiplying by its reciprocal.",m:L("k = 2 &divide; "+F("2","3"),"= 2 &middot; "+F("3","2"),"= "+F("6","2")+" = 3"),w:"The reciprocal of 2/3 is 3/2. 2 &middot; 3/2 = 6/2 = 3."},
+ {r:"Answer both parts",a:"Put k back into the template. The question asks for the constant AND the equation.",m:L("k = 3","y = 3x","check: 3 &middot; "+F("2","3")+" = 2 &nbsp;true"),w:"Two answers are being asked for. Writing only k = 3 or only y = 3x loses half the credit."}],
+ ans:"k = 3, equation y = 3x",
+ trap:"Multiplying by 2/3 instead of dividing. To undo multiplication by 2/3 you multiply by 3/2, not by 2/3."},
+
+{t:"If y varies directly as x, find the constant of variation and the equation, given y = 1/2 when x = 14",e:`<span class="word">Same template, uglier numbers.</span>`,
+ pre:["kcf"],
+ s:[
+ {r:"The template",a:"Nothing about the numbers changes the setup.",m:"y = kx",w:"Direct variation is always y = kx. The only work is finding k."},
+ {r:"Substitute",a:"Fill in the given pair.",m:L("y = "+F("1","2")+", x = 14",F("1","2")+" = k &middot; 14"),w:"k is multiplied by 14, so 14 is what you need to undo."},
+ {r:"Solve for k",a:"Divide both sides by 14. A whole number 14 is the fraction 14/1, so dividing by it means multiplying by 1/14.",m:L("k = "+F("1","2")+" &divide; 14","= "+F("1","2")+" &middot; "+F("1","14"),"= "+F("1&middot;1","2&middot;14")+" = "+F("1","28")),w:"Multiply straight across: tops give 1, bottoms give 28."},
+ {r:"Answer both parts",a:"Write the constant and the equation.",m:L("k = "+F("1","28"),"y = "+F("1","28")+"x = "+F("x","28"),"check: "+F("14","28")+" = "+F("1","2")+" &nbsp;true"),w:"(1/28)x and x/28 are the same expression. Either form is accepted."}],
+ ans:"k = 1/28, equation y = x/28",
+ trap:"Writing k = 28 by flipping at the wrong moment. k is small here because y is small while x is large."}
+];
+
+/* ---------- App ---------- */
+let i=0, shown=0, done=new Set();
+try{const d=localStorage.getItem("mth_done"); if(d) done=new Set(JSON.parse(d));
+     const c=localStorage.getItem("mth_cur"); if(c!==null) i=Math.min(Math.max(+c,0),P.length-1);}catch(e){}
+const save=()=>{try{localStorage.setItem("mth_done",JSON.stringify([...done]));localStorage.setItem("mth_cur",i);}catch(e){}};
+
+const $=id=>document.getElementById(id);
+const grid=$("grid");
+P.forEach((_,k)=>{const b=document.createElement("button");b.className="chip";b.textContent=k+1;
+  b.setAttribute("aria-label","Problem "+(k+1));b.onclick=()=>{i=k;shown=0;render();};grid.appendChild(b);});
+
+function render(){
+  const p=P[i];
+  $("pnum").textContent="Problem "+(i+1)+" of "+P.length;
+  $("ptask").innerHTML=p.t;
+  $("pexpr").innerHTML=p.e;
+
+  $("preBox").innerHTML=p.pre&&p.pre.length
+    ? `<div class="pre"><div class="lbl">Before you start, this problem uses</div><ul>${
+        p.pre.map(k=>`<li><b>${k}</b> &middot; ${RULES[k].n}: ${RULES[k].p.split(". ")[0]}.</li>`).join("")
+      }</ul></div>`
+    : "";
+
+  const sv=$("steps"); sv.innerHTML="";
+  p.s.slice(0,shown).forEach((s,k)=>{
+    const d=document.createElement("div");
+    d.className="step"+(k===shown-1?" in":"");
+    d.innerHTML=`<span class="rule">Step ${k+1} &middot; ${s.r}</span>
+      <p class="act">${s.a}</p><div class="math">${s.m}</div>
+      <details class="why"><summary>Why this works</summary><p>${s.w}</p></details>`;
+    sv.appendChild(d);
+  });
+
+  const last=shown>=p.s.length;
+  $("next").innerHTML=shown===0?"Show first step":(last?"All steps shown":"Next step &rarr;");
+  $("next").disabled=last;
+  $("all").disabled=last;
+  $("got").textContent=done.has(i)?"Got it ✓":"Got it";
+
+  const ab=$("ansBox");
+  if(last){ab.hidden=false;ab.innerHTML=`<div class="ans"><div class="lbl">Answer</div><div class="val">${p.ans}</div></div>`;}
+  else ab.hidden=true;
+
+  const tb=$("trapBox");
+  if(last&&p.trap){tb.hidden=false;tb.innerHTML=`<div class="trap"><div class="lbl">Where this one goes wrong</div><p>${p.trap}</p></div>`;}
+  else tb.hidden=true;
+
+  const fb=$("flagBox");
+  if(last&&p.flag){fb.hidden=false;fb.innerHTML=`<div class="flag"><div class="lbl">Worksheet answer looks wrong</div><p>${p.flag}</p></div>`;}
+  else fb.hidden=true;
+
+  [...grid.children].forEach((c,k)=>{c.className="chip"+(k===i?" cur":"")+(done.has(k)?" done":"");});
+  $("fill").style.width=(done.size/P.length*100)+"%";
+  $("count").textContent=done.size+" / "+P.length+" done";
+  $("prev").disabled=i===0; $("fwd").disabled=i===P.length-1;
+  save();
+}
+
+$("next").onclick=()=>{if(shown<P[i].s.length){shown++;render();}};
+$("all").onclick=()=>{shown=P[i].s.length;render();};
+$("got").onclick=()=>{done.has(i)?done.delete(i):done.add(i);render();};
+$("prev").onclick=()=>{if(i>0){i--;shown=0;render();window.scrollTo({top:0,behavior:"smooth"});}};
+$("fwd").onclick=()=>{if(i<P.length-1){i++;shown=0;render();window.scrollTo({top:0,behavior:"smooth"});}};
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="TEXTAREA")return;
+  if(e.key==="ArrowRight"){$("next").disabled||$("next").click();}
+  else if(e.key.toLowerCase()==="n"){$("fwd").disabled||$("fwd").click();}
+  else if(e.key.toLowerCase()==="p"){$("prev").disabled||$("prev").click();}
+});
+render();
+
+(async()=>{
+  const sample = (typeof claude!=="undefined" && claude && claude.use) ? await claude.use("sample") : null;
+  if(!sample)return;
+  $("ask").hidden=false;
+  const q=$("q"),reply=$("reply"),send=$("send");
+  const strip=t=>t.replace(/<[^>]+>/g," ").replace(/&minus;/g,"-").replace(/&sup2;/g,"^2").replace(/&sup3;/g,"^3")
+    .replace(/&nbsp;/g," ").replace(/&divide;/g,"/").replace(/&middot;/g,"*").replace(/&rarr;/g,"->")
+    .replace(/&ne;/g,"!=").replace(/&frac23;/g,"2/3").replace(/&infin;/g,"inf").replace(/\s+/g," ");
+  document.querySelectorAll(".quick button").forEach(b=>b.onclick=()=>{q.value=b.dataset.q;ask();});
+  send.onclick=ask;
+  async function ask(){
+    const text=q.value.trim(); if(!text)return;
+    const p=P[i];
+    const open=strip(p.s.slice(0,Math.max(shown,1)).map((s,k)=>`Step ${k+1} (${s.r}): ${s.a} -> ${s.m}`).join(" ||| "));
+    const needs=(p.pre||[]).map(k=>RULES[k].n).join(", ");
+    send.disabled=true; reply.hidden=false; reply.textContent="Thinking...";
+    try{
+      await sample([{role:"user",content:
+`You are tutoring a college student in MTH 1023 intermediate algebra, chapter 7 rational expressions. He has ADHD and loses the thread the moment a step is skipped or an arithmetic line is left implicit. Never write "clearly", "simply", "obviously", or "it follows that". Never skip a line of arithmetic, even an easy one. If your explanation depends on a rule he might not have, teach that rule first in one or two lines before using it.
+
+Current problem: ${strip(p.t)}
+Printed as: ${strip(p.e)}
+Prerequisite rules this problem leans on: ${needs}
+Steps he currently has open:
+${open}
+
+His question: ${text}
+
+Answer in plain text, no markdown, no em dashes, under 160 words. Show every line of arithmetic on its own line. If he asked for a practice problem, give the problem, then every worked step, then the answer at the end.`}],
+        {onText:({text})=>{reply.textContent=text;},modelTier:"default"});
+    }catch(err){
+      reply.textContent = err && err.code==="rate_limited"
+        ? "Too many questions at once. Wait a moment and ask again."
+        : "Could not reach Claude just now. Try again in a minute.";
+    }
+    send.disabled=false;
+  }
+})();
+</script>
+
+<script>
+/* Precache everything on first visit so later visits need no network at all. */
+if ("serviceWorker" in navigator) {
+  addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
