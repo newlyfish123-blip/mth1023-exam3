@@ -1,6 +1,6 @@
 // Cache-first service worker. Everything is precached on install, so once the
 // app has been opened one time it never needs the network again.
-const CACHE = "exam3-v1";
+const CACHE = "exam3-v2";
 const ASSETS = [
   "./",
   "./index.html",
